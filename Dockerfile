@@ -1,18 +1,24 @@
-# Use Nginx for static website
-
+# Use official Python image
 FROM python:3.12
 
+# Set working directory
 WORKDIR /app
 
+# Copy dependencies
+COPY requirements.txt .
 
-# Copy all site files into Nginx default web directory
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements
-
+# Copy the application code
 COPY . .
 
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
 
+# Expose port
 EXPOSE 5000
 
-CMD [ "python", "app.py" ]
+# Command to run the Flask app
+CMD ["python", "app.py"]
